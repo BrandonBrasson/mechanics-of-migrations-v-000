@@ -1,6 +1,6 @@
 require_relative './spec_helper'
 
- describe "Artist" do
+describe "Artist" do
   let(:artist) {Artist.new(name: 'Justice', genre: 'Electronic', age: Time.now.strftime("%Y").to_i - 2003, hometown: "Paris")}
 
   it "can instantiate a new instance" do
@@ -35,7 +35,9 @@ require_relative './spec_helper'
     expect(Artist.find_by(name: "Taylor Swift")).to eq(taytay)
   end
 
-  it "can roll back to have no favorite_food attribute for Artist" do
-    expect(Artist.column_names).to eq(["id", "name", "genre", "age", "hometown"])
+  context "after applying a `db:rollback` command that removes the favorite_food attribute" do
+   it "no longer has a favorite_food column in the 'artists' table" do
+      expect(Artist.column_names).to eq(["id", "name", "genre", "age", "hometown"])
+    end
   end
 end
